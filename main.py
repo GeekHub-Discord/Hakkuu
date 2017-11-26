@@ -35,7 +35,7 @@ async def on_message_delete(message):
     entries = await message.guild.audit_logs(
         limit=1,
         action=discord.AuditLogAction.message_delete,
-        after=(now - dt.timedelta(seconds=5))
+        after=(now - dt.timedelta(seconds=2))
     ).flatten()
     logger.info("Audit log get!")
     authorname = f"{message.author.name}#{message.author.discriminator}"
