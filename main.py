@@ -28,6 +28,7 @@ async def on_message(message):
 
 @client.event
 async def on_message_delete(message):
+    now = dt.datetime.utcnow()
     logger.info("Updating DB")
     m, created = Message.get_or_create(
         snowflake=message.id,
@@ -47,6 +48,7 @@ async def on_message_delete(message):
     ).flatten()
     logger.info("Audit log get!")
     entry = entries[0]
+    logger.info("Now: {int(now)}, entry: {int(entry.created_at)}")
     await client.get_channel(384194130894389249).send(
         f'Message from {entry.target} deleted by {entry.user.name}: {message.content}'
     )
