@@ -29,32 +29,40 @@ async def on_message(message):
 
 
 @client.event
-async def on_message_delete(message):
+async def on_message_delete_raw(message):
     now = dt.datetime.utcnow()
+
+    logger.info("Grabbing audit logs")
+    entries = await message.guild.audit_logs(
+        limit=1,
+        action=discord.AuditLogAction.message_delete,
+        after=(now - dt.timedelta(seconds=5))
+    ).flatten()
+    logger.info("Audit log get!")
+    authorname = f"{message.author.name}#{message.author.discriminator}"
+    if len(entries) > 0:
+        entry = entries[0]
+        deleter = f"{entry.user.name}#{entry.use.discriminator}"
+        deleter_id = entry.user.id
+    else:
+        deleter = authorname
+        deleter_id = message.author.id
+    await client.get_channel(384194130894389249).send(
+        f'Message from {authorname} deleted by {deleter}: {message.content}'
+    )
+
     logger.info("Updating DB")
     m, created = Message.get_or_create(
         snowflake=message.id,
         defaults={
             'author': message.author.id,
             'content': message.content,
-            'deleted': True
+            'deleted': True,
+            'deleted_by': deleter_id
         }
     )
     if not created:
         m.deleted = True
         m.save()
-    logger.info("Grabbing audit logs")
-    entries = await message.guild.audit_logs(
-        limit=1,
-        action=discord.AuditLogAction.message_delete
-    ).flatten()
-    logger.info("Audit log get!")
-    entry = entries[0]
-    unixnow = float(now.strftime("%s.%f"))
-    unixcreated = float(entry.created_at.strftime("%s.%f"))
-    logger.info(f"Now: {unixnow}, entry: {unixcreated}")
-    await client.get_channel(384194130894389249).send(
-        f'Message from {entry.target} deleted by {entry.user.name}: {message.content}'
-    )
 
 client.run(cfg.token)
