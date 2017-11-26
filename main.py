@@ -29,9 +29,10 @@ async def on_message(message):
 
 
 @client.event
-async def on_message_delete_raw(message):
+async def on_raw_message_delete(message_id, channel_id):
     now = dt.datetime.utcnow()
-
+    channel = client.get_channel(channel_id)
+    message = await channel.get_message(message_id)
     logger.info("Grabbing audit logs")
     entries = await message.guild.audit_logs(
         limit=1,
