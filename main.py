@@ -12,7 +12,7 @@ logger = get_logger('betterlogbot')
 @client.event
 async def on_ready():
     # Bots ready
-    logger.info(f"{client.user.name} is now online.")
+    logger.info(f"{client.user.name} ({client.user.id}) is now online.")
 
 
 @client.event
