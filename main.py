@@ -17,7 +17,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    m = Message.get_or_create(
+    m, created = Message.get_or_create(
         snowflake=message.id,
         defaults={
             'author': message.author.id,
@@ -28,10 +28,24 @@ async def on_message(message):
 
 @client.event
 async def on_message_delete(message):
+    logger.info("Updating DB")
+    m, created = Message.get_or_create(
+        snowflake=message.id,
+        defaults={
+            'author': message.author.id,
+            'content': message.content,
+            'deleted': True
+        }
+    )
+    if not created:
+        m.deleted = True
+        m.save()
+    logger.info("Grabbing audit logs")
     entries = await message.guild.audit_log(
         limit=50,
         action=discord.AuditLogAction.message_delete
     )
+    logger.info("Audit log get!")
     message = entries[0].target
     print(message)
 
