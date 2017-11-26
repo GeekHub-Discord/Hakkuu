@@ -42,11 +42,13 @@ async def on_message_delete(message):
         m.save()
     logger.info("Grabbing audit logs")
     entries = await message.guild.audit_logs(
-        limit=50,
+        limit=1,
         action=discord.AuditLogAction.message_delete
     ).flatten()
     logger.info("Audit log get!")
-    message = entries[0].target
-    print(message)
+    entry = entries[0]
+    await client.get_channel(384194130894389249).send(
+        f'Message from {entry.target} deleted by {entry.user.name}: {message.content}'
+    )
 
 client.run(cfg.token)
