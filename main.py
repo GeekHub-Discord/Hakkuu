@@ -49,7 +49,9 @@ async def on_message_delete(message):
     ).flatten()
     logger.info("Audit log get!")
     entry = entries[0]
-    logger.info(f"Now: {now}, entry: {entry.created_at}")
+    unixnow = time.mktime(now.timetuple())
+    unixcreated = time.mktime(entry.created_at.timetuple())
+    logger.info(f"Now: {unixnow}, entry: {unixcreated}")
     await client.get_channel(384194130894389249).send(
         f'Message from {entry.target} deleted by {entry.user.name}: {message.content}'
     )
