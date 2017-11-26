@@ -41,7 +41,7 @@ async def on_message_delete(message):
     authorname = f"{message.author.name}#{message.author.discriminator}"
     if len(entries) > 0:
         entry = entries[0]
-        deleter = f"{entry.user.name}#{entry.use.discriminator}"
+        deleter = f"{entry.user.name}#{entry.user.discriminator}"
         deleter_id = entry.user.id
     else:
         deleter = authorname
