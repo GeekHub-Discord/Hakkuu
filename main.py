@@ -29,5 +29,5 @@ async def on_message_delete(message):
         limit=50,
         action=discord.AuditLogAction.message_delete
     )
-    message = entries[0]
+    message = entries[0].target
     print(message)
