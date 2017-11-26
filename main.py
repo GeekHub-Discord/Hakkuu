@@ -1,6 +1,9 @@
+import config
 import discord
 from error_handler import get_logger
 from models import *
+
+cfg = config.botConfig()
 
 client = discord.Client()
 
@@ -31,3 +34,5 @@ async def on_message_delete(message):
     )
     message = entries[0].target
     print(message)
+
+client.run(cfg.token)
