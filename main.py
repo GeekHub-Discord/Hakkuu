@@ -41,7 +41,7 @@ async def on_message_delete(message):
         m.deleted = True
         m.save()
     logger.info("Grabbing audit logs")
-    entries = await message.guild.audit_log(
+    entries = await message.guild.audit_logs(
         limit=50,
         action=discord.AuditLogAction.message_delete
     )
