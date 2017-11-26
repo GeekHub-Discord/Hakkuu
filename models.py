@@ -33,7 +33,7 @@ class Message(BaseModel):
     author = BigIntegerField(null=False)
     content = CharField(max_length=2000)
     deleted = BooleanField(null=False, default=False)
-    deleted_by = BigIntegerField(null=False)
+    deleted_by = BigIntegerField(null=True)
 
 
 my_db.create_tables(
