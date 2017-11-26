@@ -39,7 +39,7 @@ async def on_message_delete(message):
     ).flatten()
     logger.info("Audit log get!")
     authorname = f"{message.author.name}#{message.author.discriminator}"
-    if len(entries) > 0:
+    if len(entries) > 0 and entries[0].created_at > (now - dt.timedelta(seconds=2):
         entry = entries[0]
         deleter = f"{entry.user.name}#{entry.user.discriminator}"
         deleter_id = entry.user.id
