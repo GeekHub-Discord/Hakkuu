@@ -1,0 +1,1 @@
+{"token": "MjQyNzMwNTc2MTk1MzU0NjI0.DE0mpQ.NZUK23Pry2EpodWnmsUJRmIMUzE", "database": "auttaja", "dbuser": "auttaja", "dbpasswd": "qvT6aAkCvp2nyGDW", "dbhost": "auttaja-aurora.c6mwqpakzocl.us-east-1.rds.amazonaws.com", "owner": ["109710323094683648"], "redishost": "auttaja-redis.hh4d7q.0001.use1.cache.amazonaws.com", "redisport": 6379, "dbtype": "sqlite"}
