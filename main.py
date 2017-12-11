@@ -19,6 +19,57 @@ async def on_ready():
     logger.info(f"{client.user.name} ({client.user.id}) is now online.")
 
 
+async def process_cmd(message):
+    if not message.startswith(client.user.mention):
+        return
+    sm = message.content.split(' ')
+    cmd = sm[1]
+    args = sm[2:]
+
+    # Query a single message
+    if cmd == 'query':
+        message_id = int(args[0])
+        m = LogMessage.get(message.guild.id, message_id)
+        author = message.server.get_member(m.author)
+        if not author:
+            author = await client.get_user_info(m.author)
+        channel = message.server.get_channel(m.channel)
+        if channel:
+            channel_name = channel.name
+        else:
+            channel_name = 'DELETED-CHANNEL'
+
+        em = discord.Embed(
+            title='Message Info',
+            type='rich'
+        )
+        em.set_author(
+            f'{author.name}#{author.discriminator}'
+        )
+
+        em.add_field("Channel", f"#channel_name")
+        if m.tts:
+            em.add_field("TTS", "True")
+        else:
+            em.add_field("TTS", "False")
+
+        if m.deleted:
+            em.add_field("Deleted", "True")
+        else:
+            em.add_field("Deleted", "False")
+
+
+        last_pin_status = False
+        pin_status = {False: "Unpinned", True: "Pinned"}
+        for r in m.revisions:
+            if not r.pinned == last_pin_status:
+                em.add_field(f"r.timestamp", pin_status[r.pinned])
+            else:
+                em.add_field(f"r.timestamp", r.content)
+
+        message.channel.send(embed=em)
+
+
 @client.event
 @logexcept
 async def on_message(message):
@@ -63,6 +114,8 @@ async def on_message(message):
         tts = message.tts if message.tts else None
     )
     msg_item.save()
+
+    await process_cmd(message)
 
 
 @client.event
