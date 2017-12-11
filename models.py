@@ -6,7 +6,7 @@ from pynamodb.attributes import (
 
 
 class LogRevision(MapAttribute):
-    content = UnicodeAttribute()
+    content = UnicodeAttribute(null=False)
     timestamp = UTCDateTimeAttribute()
 
 
