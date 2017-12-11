@@ -152,7 +152,7 @@ async def on_raw_message_edit(message_id, data):
     # pp = pprint.PrettyPrinter(depth=4)
     # pp.pprint(data)
     s = Settings.get(channel.guild.id)
-    logchannel = client.get_channel(s.logchannel)
+    logchannel = client.get_channel(s.log_channel)
     logchannel.send(f'Message {message_id} has been edited')
 
 
@@ -168,7 +168,7 @@ async def on_raw_message_delete(message_id, channel_id):
         m.deleted = True
         m.save()
     s = Settings.get(channel.guild.id)
-    logchannel = client.get_channel(s.logchannel)
+    logchannel = client.get_channel(s.log_channel)
     logchannel.send(f'Message {message_id} has been deleted')
 
 
