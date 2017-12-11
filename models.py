@@ -39,7 +39,7 @@ class LogMessage(Model):
     embeds = ListAttribute(of=LogEmbed)
     attachments = ListAttribute(of=LogAttachment)
     pinned = BooleanAttribute()
-    tts = BooleanAttribute()
+    tts = BooleanAttribute(null=True)
     deleted = BooleanAttribute(null=True)
     deleted_by = BooleanAttribute(null=True)
 
