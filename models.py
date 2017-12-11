@@ -8,6 +8,7 @@ from pynamodb.attributes import (
 class LogRevision(MapAttribute):
     content = UnicodeAttribute(null=False)
     timestamp = UTCDateTimeAttribute()
+    pinned = BooleanAttribute()
 
 
 class LogEmbed(MapAttribute):
@@ -38,7 +39,6 @@ class LogMessage(Model):
     revisions = ListAttribute(of=LogRevision)
     embeds = ListAttribute(of=LogEmbed)
     attachments = ListAttribute(of=LogAttachment)
-    pinned = BooleanAttribute()
     tts = BooleanAttribute(null=True)
     deleted = BooleanAttribute(null=True)
     deleted_by = BooleanAttribute(null=True)
