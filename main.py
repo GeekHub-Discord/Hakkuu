@@ -134,7 +134,7 @@ async def on_raw_message_edit(message_id, data):
         return
     try:
         ts = dateutil.parser.parse(data['edited_timestamp'])
-    except TypeError as e:
+    except KeyError as e:
         ts = dt.datetime.utcnow()
     if 'content' in data:
         rev = LogRevision(
