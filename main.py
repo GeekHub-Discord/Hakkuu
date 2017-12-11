@@ -65,9 +65,14 @@ async def on_message(message):
 @client.event
 @logexcept
 async def on_raw_message_edit(message_id, data):
-    pp = pprint.PrettyPrinter(depth=4)
-    logger.info(f"Message edited: {message_id}")
-    pp.pprint(data)
+    if 'content' in data:
+        channel = client.get_channel(data['channel_id'])
+        m = LogMessage.get(channel.guild.id, message_id)
+        rev = LogRevision(
+            content=data['content'],
+            timestamp=dt.strptime(data['edited_timestamp'])
+        )
+        m.revisions.append(rev)
 
 
 @client.event
