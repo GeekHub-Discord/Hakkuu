@@ -13,6 +13,8 @@ client = discord.Client()
 
 logger = get_logger('betterlogbot')
 
+pin_status = {False: "Unpinned", True: "Pinned"}
+
 @client.event
 async def on_ready():
     # Bots ready
@@ -60,7 +62,7 @@ async def process_cmd(message):
 
 
         last_pin_status = False
-        pin_status = {False: "Unpinned", True: "Pinned"}
+
         for r in m.revisions:
             if not r.pinned == last_pin_status:
                 em.add_field(
@@ -153,7 +155,13 @@ async def on_raw_message_edit(message_id, data):
     # pp.pprint(data)
     s = Settings.get(channel.guild.id)
     logchannel = client.get_channel(s.log_channel)
-    await logchannel.send(f'Message {message_id} has been edited')
+    if not m.revisions[-2].pinned == m.revisions[-1].pinned:
+        state = pin_status[m.revisions[-1].pinned]
+        await logchannel.send(
+            f'Message {message_id} has been {state}'
+        )
+    else:
+        await logchannel.send(f'Message {message_id} has been edited')
 
 
 
