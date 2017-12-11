@@ -70,7 +70,7 @@ async def on_raw_message_edit(message_id, data):
         m = LogMessage.get(channel.guild.id, message_id)
         rev = LogRevision(
             content=data['content'],
-            timestamp=dt.strptime(data['edited_timestamp'])
+            timestamp=dt.datetime.strptime(data['edited_timestamp'])
         )
         m.revisions.append(rev)
 
