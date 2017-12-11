@@ -78,7 +78,12 @@ async def on_raw_message_edit(message_id, data):
 
 
 @client.event
-async def on_message_delete(message):
-    pass
+async def on_raw_message_delete(message_id, channel_id):
+    channel = client.get_channel(channel_id)
+    m = LogMessage.get(channel.guild.id, message_id)
+    if m:
+        m.deleted = True
+        m.save()
+
 
 client.run(cfg.token)
