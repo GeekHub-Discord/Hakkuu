@@ -60,7 +60,7 @@ async def on_message(message):
         embeds=embeds,
         attachments=attachments,
         pinned=message.pinned,
-        tts = message.tts
+        tts = message.tts if message.tts else None
     )
     msg_item.save()
 
