@@ -64,12 +64,12 @@ async def process_cmd(message):
         for r in m.revisions:
             if not r.pinned == last_pin_status:
                 em.add_field(
-                    name=f"{r.timestamp}",
+                    name=f"{r.timestamp.strftime('%c')}",
                     value=pin_status[r.pinned],
                     inline=False)
             else:
                 em.add_field(
-                    name=f"{r.timestamp}",
+                    name=f"{r.timestamp.strftime('%c')}",
                     value=r.content,
                     inline=False)
             last_pin_status = r.pinned
