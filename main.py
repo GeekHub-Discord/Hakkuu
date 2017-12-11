@@ -48,7 +48,7 @@ async def on_message(message):
         content=message.content,
         timestamp=message.created_at
     )
-    msg_item = Message(
+    msg_item = LogMessage(
         guild=message.guild.id,
         snowflake=message.id,
         author=message.author.id,
