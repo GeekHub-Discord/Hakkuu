@@ -80,6 +80,8 @@ async def on_raw_message_edit(message_id, data):
         )
         m.revisions.append(rev)
         m.save()
+    pp = pprint.PrettyPrinter(depth=4)
+    pp.pprint(data)
 
 
 @client.event
