@@ -49,7 +49,7 @@ async def on_message(message):
         )
     rev = LogRevision(
         content=message.content if message.content else None,
-        timestamp=message.created_at
+        timestamp=message.created_at,
         pinned=message.pinned
     )
     msg_item = LogMessage(
@@ -82,7 +82,7 @@ async def on_raw_message_edit(message_id, data):
             content=data['content'],
             timestamp=ts,
             pinned=data['pinned']
-        )    
+        )
     else:
         rev = LogRevision(
             timestamp=ts,
