@@ -22,6 +22,8 @@ async def on_ready():
 @client.event
 @logexcept
 async def on_message(message):
+    if message.author.bot:
+        return
     embeds = []
     for e in message.embeds:
         embeds.append(
