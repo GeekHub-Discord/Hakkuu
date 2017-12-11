@@ -1,9 +1,10 @@
 import config
 import discord
 import datetime as dt
+import pprint
 import time
 from error_handler import get_logger
-from models import *
+from models import LogMessage, LogEmbed, LogRevision, LogAttachment
 
 cfg = config.botConfig()
 
@@ -18,50 +19,59 @@ async def on_ready():
 
 
 @client.event
+@logexcept
 async def on_message(message):
-    m, created = Message.get_or_create(
-        snowflake=message.id,
-        defaults={
-            'author': message.author.id,
-            'content': message.content
-        }
+    embeds = []
+    for e in message.embeds:
+        embeds.append(
+            LogEmbed(
+                title=e.title,
+                type=e.type,
+                description=e.description,
+                url=e.url,
+                timestamp=e.timestamp
+            )
+        )
+    attachments = []
+    for a in message.attachments:
+        attachments.append(
+            LogAttachment(
+                attachid=a.id,
+                size=a.size,
+                height=a.height,
+                width=a.width,
+                filename=a.filename,
+                url=a.url
+            )
+        )
+    rev = LogRevision(
+        content=message.content,
+        timestamp=message.created_at
     )
+    msg_item = Message(
+        guild=message.guild.id,
+        snowflake=message.id,
+        author=message.author.id,
+        channel=message.channel.id,
+        revisions=[rev],
+        embeds=embeds,
+        attachments=attachments,
+        pinned=message.pinned,
+        tts = message.tts
+    )
+    msg_item.save()
+
+
+@client.event
+@logexcept
+async def on_raw_message_edit(message_id, data):
+    pp = pprint.PrettyPrinter(depth=4)
+    logger.info(f"Message edited: {message_id}")
+    pp.pprint(data)
 
 
 @client.event
 async def on_message_delete(message):
-    now = dt.datetime.utcnow()
-    logger.info("Grabbing audit logs")
-    entries = await message.guild.audit_logs(
-        limit=1,
-        action=discord.AuditLogAction.message_delete,
-        after=(now - dt.timedelta(seconds=2))
-    ).flatten()
-    logger.info("Audit log get!")
-    authorname = f"{message.author.name}#{message.author.discriminator}"
-    if len(entries) > 0 and entries[0].created_at > (now - dt.timedelta(seconds=2)):
-        entry = entries[0]
-        deleter = f"{entry.user.name}#{entry.user.discriminator}"
-        deleter_id = entry.user.id
-    else:
-        deleter = authorname
-        deleter_id = message.author.id
-    await client.get_channel(384194130894389249).send(
-        f'Message from {authorname} deleted by {deleter}: {message.content}'
-    )
 
-    logger.info("Updating DB")
-    m, created = Message.get_or_create(
-        snowflake=message.id,
-        defaults={
-            'author': message.author.id,
-            'content': message.content,
-            'deleted': True,
-            'deleted_by': deleter_id
-        }
-    )
-    if not created:
-        m.deleted = True
-        m.save()
 
 client.run(cfg.token)

@@ -13,8 +13,7 @@ python_version = "3.6"
 [packages]
 
 "discord.py" = {git = "https://github.com/Rapptz/discord.py.git", ref = "rewrite"}
-peewee = "*"
-pymysql = "*"
+"pynamodb" = "*"
 
 
 [dev-packages]
