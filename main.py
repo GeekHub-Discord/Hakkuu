@@ -30,7 +30,7 @@ async def on_message(message):
                 type=e.type,
                 description=e.description,
                 url=e.url,
-                timestamp=e.timestamp
+                timestamp=e.timestamp if e.timestamp else None
             )
         )
     attachments = []
