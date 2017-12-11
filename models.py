@@ -38,8 +38,11 @@ class LogMessage(Model):
     revisions = ListAttribute(of=LogRevision)
     embeds = ListAttribute(of=LogEmbed)
     attachments = ListAttribute(of=LogAttachment)
-    content = UnicodeAttribute()
     pinned = BooleanAttribute()
     tts = BooleanAttribute()
     deleted = BooleanAttribute(null=True)
     deleted_by = BooleanAttribute(null=True)
+
+if not LogMessage.exists():
+    LogMessage.create_table(
+        read_capacity_units=1, write_capacity_units=1, wait=True)
