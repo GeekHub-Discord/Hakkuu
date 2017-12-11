@@ -153,7 +153,7 @@ async def on_raw_message_edit(message_id, data):
     # pp.pprint(data)
     s = Settings.get(channel.guild.id)
     logchannel = client.get_channel(s.log_channel)
-    logchannel.send(f'Message {message_id} has been edited')
+    await logchannel.send(f'Message {message_id} has been edited')
 
 
 
@@ -169,7 +169,7 @@ async def on_raw_message_delete(message_id, channel_id):
         m.save()
     s = Settings.get(channel.guild.id)
     logchannel = client.get_channel(s.log_channel)
-    logchannel.send(f'Message {message_id} has been deleted')
+    await logchannel.send(f'Message {message_id} has been deleted')
 
 
 client.run(cfg.token)
