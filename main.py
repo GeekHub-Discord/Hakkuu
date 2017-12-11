@@ -48,7 +48,7 @@ async def on_message(message):
             )
         )
     rev = LogRevision(
-        content=message.content,
+        content=message.content if message.content else None,
         timestamp=message.created_at
     )
     msg_item = LogMessage(
@@ -72,7 +72,7 @@ async def on_raw_message_edit(message_id, data):
         channel = client.get_channel(int(data['channel_id']))
         try:
             m = LogMessage.get(channel.guild.id, message_id)
-        except models.LogMessage.DoesNotExist as e:
+        except LogMessage.DoesNotExist as e:
             return
         rev = LogRevision(
             content=data['content'],
@@ -87,7 +87,7 @@ async def on_raw_message_delete(message_id, channel_id):
     channel = client.get_channel(channel_id)
     try:
         m = LogMessage.get(channel.guild.id, message_id)
-    except models.LogMessage.DoesNotExist as e:
+    except LogMessage.DoesNotExist as e:
         return
     if m:
         m.deleted = True
