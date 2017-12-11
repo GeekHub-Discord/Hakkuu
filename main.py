@@ -47,7 +47,7 @@ async def process_cmd(message):
             name=f'{author.name}#{author.discriminator}'
         )
 
-        em.add_field(name="Channel", value=f"#channel_name")
+        em.add_field(name="Channel", value=f"#{channel_name}")
         if m.tts:
             em.add_field(name="TTS", value="True")
         else:
@@ -63,9 +63,9 @@ async def process_cmd(message):
         pin_status = {False: "Unpinned", True: "Pinned"}
         for r in m.revisions:
             if not r.pinned == last_pin_status:
-                em.add_field(name=f"r.timestamp", value=pin_status[r.pinned])
+                em.add_field(name=f"{r.timestamp}", value=pin_status[r.pinned])
             else:
-                em.add_field(name=f"r.timestamp", value=r.content)
+                em.add_field(name=f"{r.timestamp}", value=r.content)
 
         await message.channel.send(embed=em)
 
