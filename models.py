@@ -1,7 +1,7 @@
 from pynamodb.models import Model
 from pynamodb.attributes import (
     UnicodeAttribute, NumberAttribute, UTCDateTimeAttribute,
-    MapAttribute, ListAttribute
+    MapAttribute, ListAttribute, BooleanAttribute
 )
 
 
