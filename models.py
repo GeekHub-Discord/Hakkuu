@@ -57,4 +57,3 @@ if not LogMessage.exists():
 if not Settings.exists():
     Settings.create_table(
         read_capacity_units=1, write_capacity_units=1, wait=True)
-    )
