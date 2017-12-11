@@ -74,6 +74,7 @@ async def on_raw_message_edit(message_id, data):
             timestamp=dateutil.parser.parse(data['edited_timestamp'])
         )
         m.revisions.append(rev)
+        m.save()
 
 
 @client.event
