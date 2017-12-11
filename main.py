@@ -70,7 +70,10 @@ async def on_message(message):
 async def on_raw_message_edit(message_id, data):
     if 'content' in data:
         channel = client.get_channel(int(data['channel_id']))
-        m = LogMessage.get(channel.guild.id, message_id)
+        try:
+            m = LogMessage.get(channel.guild.id, message_id)
+        except models.LogMessage.DoesNotExist as e:
+            return
         rev = LogRevision(
             content=data['content'],
             timestamp=dateutil.parser.parse(data['edited_timestamp'])
@@ -82,7 +85,10 @@ async def on_raw_message_edit(message_id, data):
 @client.event
 async def on_raw_message_delete(message_id, channel_id):
     channel = client.get_channel(channel_id)
-    m = LogMessage.get(channel.guild.id, message_id)
+    try:
+        m = LogMessage.get(channel.guild.id, message_id)
+    except models.LogMessage.DoesNotExist as e:
+        return
     if m:
         m.deleted = True
         m.save()
