@@ -1,41 +1,45 @@
-import config
-from peewee import *
-import pymysql
-from playhouse.shortcuts import RetryOperationalError
-
-cfg = config.botConfig()
-
-class MySQLDB(RetryOperationalError, MySQLDatabase):
-    pass
-
-class SqliteDB(SqliteDatabase):
-    pass
-
-if cfg.dbtype == 'sqlite':
-    my_db = SqliteDB(f'{cfg.database}.db')
-else:
-    my_db = MySQLDB(
-            cfg.database,
-            host=cfg.dbhost,
-            port=3306,
-            user=cfg.dbuser,
-            password=cfg.dbpasswd,
-            charset='utf8mb4')
+from pynamodb.models import model
+from pynamodb.attributes import (
+    UnicodeAttribute, NumberAttribute, UTCDateTimeAttribute,
+    MapAttribute, ListAttribute
+)
 
 
-class BaseModel(Model):
+class LogRevision(MapAttribute):
+    content = UnicodeAttribute()
+    timestamp = UTCDateTimeAttribute()
+
+
+class LogEmbed(MapAttribute):
+    title = UnicodeAttribute(null=True)
+    em_type = UnicodeAttribute(null=True)
+    description = UnicodeAttribute(null=True)
+    url = UnicodeAttribute(null=True)
+    timestamp = UTCDateTimeAttribute()
+
+
+class LogAttachment(MapAttribute):
+    attachid = NumberAttribute()
+    size = NumberAttribute()
+    height = NumberAttribute(null=True)
+    width = NumberAttribute(null=True)
+    filename = UnicodeAttribute()
+    url = UnicodeAttribute()
+
+
+class LogMessage(Model):
     class Meta:
-        database = my_db
+        table_name = 'hakkuu_message'
 
-
-class Message(BaseModel):
-    snowflake = BigIntegerField(null=False, primary_key=True)
-    author = BigIntegerField(null=False)
-    content = CharField(max_length=2000)
-    deleted = BooleanField(null=False, default=False)
-    deleted_by = BigIntegerField(null=True)
-
-
-my_db.create_tables(
-    [Message],
-    safe=True)
+    guild = NumberAttribute(hash_key=True)
+    snowflake = NumberAttribute(range_key=True)
+    author = NumberAttribute()
+    channel = NumberAttribute()
+    revisions = ListAttribute(of=LogRevision)
+    embeds = ListAttribute(of=LogEmbed)
+    attachments = ListAttribute(of=LogAttachment)
+    content = UnicodeAttribute()
+    pinned = BooleanAttribute()
+    tts = BooleanAttribute()
+    deleted = BooleanAttribute(null=True)
+    deleted_by = BooleanAttribute(null=True)
