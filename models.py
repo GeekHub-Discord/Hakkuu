@@ -1,4 +1,4 @@
-from pynamodb.models import model
+from pynamodb.models import Model
 from pynamodb.attributes import (
     UnicodeAttribute, NumberAttribute, UTCDateTimeAttribute,
     MapAttribute, ListAttribute
