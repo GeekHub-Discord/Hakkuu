@@ -44,7 +44,7 @@ async def process_cmd(message):
             type='rich'
         )
         em.set_author(
-            f'{author.name}#{author.discriminator}'
+            name=f'{author.name}#{author.discriminator}'
         )
 
         em.add_field("Channel", f"#channel_name")
