@@ -5,7 +5,7 @@ import dateutil.parser
 import pprint
 import time
 from error_handler import get_logger, logexcept
-from models import LogMessage, LogEmbed, LogRevision, LogAttachment
+from models import LogMessage, LogEmbed, LogRevision, LogAttachment, Settings
 
 cfg = config.botConfig()
 
@@ -151,6 +151,10 @@ async def on_raw_message_edit(message_id, data):
     m.save()
     # pp = pprint.PrettyPrinter(depth=4)
     # pp.pprint(data)
+    s = Settings.get(channel.guild.id)
+    logchannel = client.get_channel(s.logchannel)
+    logchannel.send(f'Message {message_id} has been edited')
+
 
 
 @client.event
@@ -163,6 +167,9 @@ async def on_raw_message_delete(message_id, channel_id):
     if m:
         m.deleted = True
         m.save()
+    s = Settings.get(channel.guild.id)
+    logchannel = client.get_channel(s.logchannel)
+    logchannel.send(f'Message {message_id} has been deleted')
 
 
 client.run(cfg.token)
