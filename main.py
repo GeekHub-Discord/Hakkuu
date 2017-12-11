@@ -50,6 +50,7 @@ async def on_message(message):
     rev = LogRevision(
         content=message.content if message.content else None,
         timestamp=message.created_at
+        pinned=message.pinned
     )
     msg_item = LogMessage(
         guild=message.guild.id,
@@ -59,7 +60,6 @@ async def on_message(message):
         revisions=[rev],
         embeds=embeds,
         attachments=attachments,
-        pinned=message.pinned,
         tts = message.tts if message.tts else None
     )
     msg_item.save()
@@ -68,22 +68,28 @@ async def on_message(message):
 @client.event
 @logexcept
 async def on_raw_message_edit(message_id, data):
+    channel = client.get_channel(int(data['channel_id']))
+    try:
+        m = LogMessage.get(channel.guild.id, message_id)
+    except LogMessage.DoesNotExist as e:
+        return
+    try:
+        ts = dateutil.parser.parse(data['edited_timestamp'])
+    except TypeError as e:
+        ts = dt.datetime.utcnow()
     if 'content' in data:
-        channel = client.get_channel(int(data['channel_id']))
-        try:
-            m = LogMessage.get(channel.guild.id, message_id)
-        except LogMessage.DoesNotExist as e:
-            return
-        try:
-            ts = dateutil.parser.parse(data['edited_timestamp'])
-        except TypeError as e:
-            ts = dt.datetime.utcnow()
         rev = LogRevision(
             content=data['content'],
-            timestamp=ts
+            timestamp=ts,
+            pinned=data['pinned']
+        )    
+    else:
+        rev = LogRevision(
+            timestamp=ts,
+            pinned=data['pinned']
         )
-        m.revisions.append(rev)
-        m.save()
+    m.revisions.append(rev)
+    m.save()
     pp = pprint.PrettyPrinter(depth=4)
     pp.pprint(data)
 
