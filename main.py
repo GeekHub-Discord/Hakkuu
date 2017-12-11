@@ -63,9 +63,15 @@ async def process_cmd(message):
         pin_status = {False: "Unpinned", True: "Pinned"}
         for r in m.revisions:
             if not r.pinned == last_pin_status:
-                em.add_field(name=f"{r.timestamp}", value=pin_status[r.pinned])
+                em.add_field(
+                    name=f"{r.timestamp}",
+                    value=pin_status[r.pinned],
+                    inline=False)
             else:
-                em.add_field(name=f"{r.timestamp}", value=r.content)
+                em.add_field(
+                    name=f"{r.timestamp}",
+                    value=r.content,
+                    inline=False)
             last_pin_status = r.pinned
         await message.channel.send(embed=em)
 
