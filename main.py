@@ -29,7 +29,7 @@ async def on_message(message):
         embeds.append(
             LogEmbed(
                 title=e.title,
-                type=e.type,
+                em_type=e.type,
                 description=e.description,
                 url=e.url,
                 timestamp=e.timestamp if e.timestamp else None
