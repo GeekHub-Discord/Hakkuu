@@ -74,9 +74,13 @@ async def on_raw_message_edit(message_id, data):
             m = LogMessage.get(channel.guild.id, message_id)
         except LogMessage.DoesNotExist as e:
             return
+        try:
+            ts = dateutil.parser.parse(data['edited_timestamp'])
+        except TypeError as e:
+            ts = dt.datetime.utcnow()
         rev = LogRevision(
             content=data['content'],
-            timestamp=dateutil.parser.parse(data['edited_timestamp'])
+            timestamp=ts
         )
         m.revisions.append(rev)
         m.save()
