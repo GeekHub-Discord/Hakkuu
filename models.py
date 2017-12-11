@@ -43,6 +43,18 @@ class LogMessage(Model):
     deleted = BooleanAttribute(null=True)
     deleted_by = BooleanAttribute(null=True)
 
+class Settings(Model):
+    class Meta:
+        table_name = 'hakkuu_settings'
+
+    guild = NumberAttribute(hash_key=True)
+    log_channel = NumberAttribute()
+
 if not LogMessage.exists():
     LogMessage.create_table(
         read_capacity_units=1, write_capacity_units=1, wait=True)
+
+if not Settings.exists():
+    Settings.create_table(
+        read_capacity_units=1, write_capacity_units=1, wait=True)
+    )
