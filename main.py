@@ -72,6 +72,6 @@ async def on_raw_message_edit(message_id, data):
 
 @client.event
 async def on_message_delete(message):
-
+    pass
 
 client.run(cfg.token)
