@@ -20,7 +20,7 @@ async def on_ready():
 
 
 async def process_cmd(message):
-    if not message.startswith(client.user.mention):
+    if not message.content.startswith(client.user.mention):
         return
     sm = message.content.split(' ')
     cmd = sm[1]
