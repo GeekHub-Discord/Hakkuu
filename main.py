@@ -1,6 +1,7 @@
 import config
 import discord
 import datetime as dt
+import dateutil.parser
 import pprint
 import time
 from error_handler import get_logger, logexcept
@@ -70,7 +71,7 @@ async def on_raw_message_edit(message_id, data):
         m = LogMessage.get(channel.guild.id, message_id)
         rev = LogRevision(
             content=data['content'],
-            timestamp=dt.datetime.strptime(data['edited_timestamp'])
+            timestamp=dateutil.parser.parse(data['edited_timestamp'])
         )
         m.revisions.append(rev)
 
