@@ -66,7 +66,7 @@ async def on_message(message):
 @logexcept
 async def on_raw_message_edit(message_id, data):
     if 'content' in data:
-        channel = client.get_channel(data['channel_id'])
+        channel = client.get_channel(int(data['channel_id']))
         m = LogMessage.get(channel.guild.id, message_id)
         rev = LogRevision(
             content=data['content'],
