@@ -30,10 +30,10 @@ async def process_cmd(message):
     if cmd == 'query':
         message_id = int(args[0])
         m = LogMessage.get(message.guild.id, message_id)
-        author = message.server.get_member(m.author)
+        author = message.guild.get_member(m.author)
         if not author:
             author = await client.get_user_info(m.author)
-        channel = message.server.get_channel(m.channel)
+        channel = message.guild.get_channel(m.channel)
         if channel:
             channel_name = channel.name
         else:
