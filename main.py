@@ -67,7 +67,7 @@ async def process_cmd(message):
             else:
                 em.add_field(name=f"r.timestamp", value=r.content)
 
-        message.channel.send(embed=em)
+        await message.channel.send(embed=em)
 
 
 @client.event
