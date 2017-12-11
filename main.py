@@ -47,25 +47,25 @@ async def process_cmd(message):
             name=f'{author.name}#{author.discriminator}'
         )
 
-        em.add_field("Channel", f"#channel_name")
+        em.add_field(name="Channel", value=f"#channel_name")
         if m.tts:
-            em.add_field("TTS", "True")
+            em.add_field(name="TTS", value="True")
         else:
-            em.add_field("TTS", "False")
+            em.add_field(name="TTS", value="False")
 
         if m.deleted:
-            em.add_field("Deleted", "True")
+            em.add_field(name="Deleted", value="True")
         else:
-            em.add_field("Deleted", "False")
+            em.add_field(name="Deleted", value="False")
 
 
         last_pin_status = False
         pin_status = {False: "Unpinned", True: "Pinned"}
         for r in m.revisions:
             if not r.pinned == last_pin_status:
-                em.add_field(f"r.timestamp", pin_status[r.pinned])
+                em.add_field(name=f"r.timestamp", value=pin_status[r.pinned])
             else:
-                em.add_field(f"r.timestamp", r.content)
+                em.add_field(name=f"r.timestamp", value=r.content)
 
         message.channel.send(embed=em)
 
