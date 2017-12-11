@@ -3,7 +3,7 @@ import discord
 import datetime as dt
 import pprint
 import time
-from error_handler import get_logger
+from error_handler import get_logger, logexcept
 from models import LogMessage, LogEmbed, LogRevision, LogAttachment
 
 cfg = config.botConfig()
