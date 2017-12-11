@@ -66,7 +66,7 @@ async def process_cmd(message):
                 em.add_field(name=f"{r.timestamp}", value=pin_status[r.pinned])
             else:
                 em.add_field(name=f"{r.timestamp}", value=r.content)
-
+            last_pin_status = r.pinned
         await message.channel.send(embed=em)
 
 
