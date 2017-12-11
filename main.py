@@ -18,7 +18,7 @@ async def on_ready():
     # Bots ready
     logger.info(f"{client.user.name} ({client.user.id}) is now online.")
 
-
+@logexcept
 async def process_cmd(message):
     if not message.content.startswith(client.user.mention):
         return
