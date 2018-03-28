@@ -160,10 +160,10 @@ async def on_raw_message_edit(message_id, data):
     if not m.revisions[-2].pinned == m.revisions[-1].pinned:
         state = pin_status[m.revisions[-1].pinned]
         await logchannel.send(
-            f'Message {message_id} has been {state} in <#{data['channel_id']}>'
+            f'Message {message_id} has been {state} in <#{data["channel_id"]}>'
         )
     else:
-        await logchannel.send(f'Message {message_id} has been edited in <#{data['channel_id']}>')
+        await logchannel.send(f'Message {message_id} has been edited in <#{data["channel_id"]}>')
 
 
 
