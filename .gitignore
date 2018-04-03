@@ -4,3 +4,4 @@ __pycache__/
 *.log
 *.lock
 *.db
+config/config.sample.json
